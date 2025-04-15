@@ -39,7 +39,7 @@ def preprocess_image(image):
     ])
     return transform(image).unsqueeze(0)
 
-# Styling the page
+# --- Page Style ---
 st.markdown("""
     <style>
     .main {
@@ -66,42 +66,64 @@ st.markdown("""
         margin-top: 50px;
         opacity: 0.8;
     }
+    .image-container {
+        border-radius: 10px;
+        border: 2px solid #00bcd4;
+        padding: 10px;
+    }
+    .button {
+        background-color: #00bcd4;
+        color: #fff;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: none;
+    }
+    .button:hover {
+        background-color: #008c99;
+    }
     .progress-bar {
         height: 25px;
         border-radius: 10px;
     }
+
+    /* FIXED UPLOADER */
+    .fixed-uploader {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 300px;
+        z-index: 9999;
+        background-color: #262730;
+        border: 2px solid #00bcd4;
+        border-radius: 10px;
+        padding: 15px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# Sticky uploader (top-right corner)
-st.markdown("""
-    <div id="sticky-uploader" style="position:fixed; top:20px; right:20px; z-index:9999; background-color:#1c1c1c; padding:10px; border:2px solid #00bcd4; border-radius:10px; box-shadow:0 0 10px #00bcd4;">
-        <label style="color:white;">📁 Upload Retinal Image</label><br/>
-        <input type="file" id="custom-upload" accept=".jpg,.jpeg,.png" style="margin-top:8px;" />
-    </div>
-    <script>
-        const customUploader = document.getElementById("custom-upload");
-        const realUploader = window.parent.document.querySelector('input[type="file"]');
+# Inject a container for the fixed uploader using HTML + components
+from streamlit.components.v1 import html
 
-        customUploader.addEventListener("change", (e) => {
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(e.target.files[0]);
-            realUploader.files = dataTransfer.files;
-            realUploader.dispatchEvent(new Event("change", { bubbles: true }));
-        });
-    </script>
-""", unsafe_allow_html=True)
+html("""
+<div class="fixed-uploader">
+    <p style='color:white;font-weight:bold;margin-bottom:8px'>📤 Upload Retinal Image</p>
+</div>
+""", height=100)
 
-# Title section with human eye image
+# Place uploader inside the fixed container using st.empty()
+uploader_placeholder = st.empty()
+with uploader_placeholder.container():
+    uploaded_file = st.file_uploader("", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
+
+# Main Title & Image
 st.markdown('<h1 class="title">👁️ Retinal Disease Diagnosis🩺</h1>', unsafe_allow_html=True)
 st.image("https://chromaviso.com/hubfs/Blog/shutterstock_1962443701_Lille.jpeg", caption="Human Eye - Retinal Analysis", use_column_width=True)
 
-# Description
+# Description section
 st.markdown('<p class="description">Upload a retinal image to analyze for common diseases using deep learning models. See results instantly!</p>', unsafe_allow_html=True)
 
-# Real file uploader (linked with the sticky one)
-uploaded_file = st.file_uploader("", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
-
+# Image processing and prediction
 if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
     st.image(image, caption="Uploaded Retinal Image", use_column_width=True, channels="RGB")
