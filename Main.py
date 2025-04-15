@@ -110,7 +110,8 @@ if uploaded_file:
 
         st.subheader("📊 Prediction Confidence")
         for i, disease in enumerate(disease_labels):
-            st.progress(min(probs[i], 1.0), text=f"{disease}: {probs[i] * 100:.2f}%")  # progress bar
+            st.progress(min(probs[i], 1.0))  # progress bar
+            st.write(f"{disease}: {probs[i] * 100:.2f}%")  # text output
 
         top_idx = np.argmax(probs)
         st.success(f"🧾 Most likely diagnosis: **{disease_labels[top_idx]}**")
