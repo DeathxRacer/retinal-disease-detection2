@@ -62,7 +62,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Title section
-st.markdown('<h1 class="title">🧠 Retinal Disease Diagnosis🩺</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="title">👁️ Retinal Disease Diagnosis🩺</h1>', unsafe_allow_html=True)
 st.write("Upload a retinal image to analyze for common diseases using deep learning.")
 
 # Upload image
