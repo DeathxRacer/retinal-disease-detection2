@@ -39,49 +39,13 @@ def preprocess_image(image):
     ])
     return transform(image).unsqueeze(0)
 
-# Apply custom CSS for the floating file uploader box
+# Style the page with custom background and design
 st.markdown("""
     <style>
-    /* CSS for floating the file uploader box */
-    .stFileUploader {
-        position: fixed;
-        top: 50%;  /* Position vertically centered */
-        left: 20px;
-        transform: translateY(-50%);  /* Exact vertical centering */
-        z-index: 1000;
-        width: 220px;  /* Slightly rectangular width */
-        height: 120px;  /* Slightly rectangular height */
-        border-radius: 15px;  /* Rounded corners */
-        padding: 10px;
-        background-color: rgba(255, 255, 255, 0.8);  /* Semi-transparent background */
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    /* Style for the uploader box */
-    .stFileUploader .css-1k76s6d {
-        background-color: #00bcd4;
-        color: white;
-        border-radius: 10px;
-        padding: 10px;
-        text-align: center;
-        font-size: 14px;
-        width: 100%;
-        height: 100%;
-    }
-
-    .stFileUploader .css-1k76s6d:hover {
-        background-color: #008c99;
-    }
-
-    /* CSS for other page elements */
     .main {
         background-color: #1c1c1c;
         color: #f0f0f0;
         font-family: 'Segoe UI', sans-serif;
-        margin-top: 120px;  /* Adjust the margin for content */
     }
     .title {
         text-align: center;
@@ -102,6 +66,61 @@ st.markdown("""
         margin-top: 50px;
         opacity: 0.8;
     }
+    .image-container {
+        border-radius: 10px;
+        border: 2px solid #00bcd4;
+        padding: 10px;
+    }
+    .button {
+        background-color: #00bcd4;
+        color: #fff;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: none;
+    }
+    .button:hover {
+        background-color: #008c99;
+    }
+    .progress-bar {
+        height: 25px;
+        border-radius: 10px;
+    }
+    
+    /* CSS for floating file uploader box */
+    .stFileUploader {
+        position: fixed;
+        top: 50%;  /* Position vertically centered */
+        left: 20px;
+        transform: translateY(-50%);  /* Exact vertical centering */
+        z-index: 1000;
+        width: 250px;  /* Slightly rectangular width */
+        height: 150px;  /* Slightly rectangular height */
+        border-radius: 15px;  /* Rounded corners */
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.9);  /* Semi-transparent background */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid #00bcd4;  /* Border similar to page style */
+    }
+
+    /* Style for the file uploader text */
+    .stFileUploader .css-1k76s6d {
+        background-color: #00bcd4;
+        color: white;
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+        font-size: 14px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .stFileUploader .css-1k76s6d:hover {
+        background-color: #008c99;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -119,24 +138,4 @@ if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
     st.image(image, caption="Uploaded Retinal Image", use_column_width=True, channels="RGB")
 
-    if st.button("🔍 Classify", key="classify_button"):
-        input_tensor = preprocess_image(image)
-        with torch.no_grad():
-            output = model(input_tensor)
-            probs = torch.softmax(output, dim=1).squeeze().numpy()
-
-        st.subheader("📊 Prediction Confidence")
-        for i, disease in enumerate(disease_labels):
-            # Ensure progress is in percentage
-            st.progress(int(probs[i] * 100))  # progress bar (converted to percentage)
-            st.write(f"{disease}: {probs[i] * 100:.2f}%")  # text output
-
-        top_idx = np.argmax(probs)
-        st.success(f"🧾 Most likely diagnosis: **{disease_labels[top_idx]}**")
-
-# Footer
-st.markdown("""
-    <div class="footer">
-        Made By Keerthi Vardhan, Sathwik & Sujith · © 2025
-    </div>
-""", unsafe_allow_html=True)
+    if st.button("🔍 Classify", key="class
