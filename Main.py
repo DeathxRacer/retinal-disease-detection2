@@ -46,25 +46,29 @@ st.markdown("""
     .stFileUploader {
         position: fixed;
         top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
+        left: 20px;
         z-index: 1000;
-        width: 80%;  /* Adjust width as per your needs */
-        max-width: 500px;  /* Maximum width of the uploader */
-        border-radius: 8px;
+        width: 150px;  /* Set width for square */
+        height: 150px;  /* Set height for square */
+        border-radius: 15px;  /* Rounded corners */
         padding: 10px;
         background-color: rgba(255, 255, 255, 0.8);  /* Semi-transparent background */
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     /* Style for the uploader box */
     .stFileUploader .css-1k76s6d {
         background-color: #00bcd4;
         color: white;
-        border-radius: 8px;
-        padding: 15px;
+        border-radius: 10px;
+        padding: 10px;
         text-align: center;
-        font-size: 16px;
+        font-size: 14px;
+        width: 100%;
+        height: 100%;
     }
 
     .stFileUploader .css-1k76s6d:hover {
@@ -127,11 +131,4 @@ if uploaded_file:
             st.write(f"{disease}: {probs[i] * 100:.2f}%")  # text output
 
         top_idx = np.argmax(probs)
-        st.success(f"🧾 Most likely diagnosis: **{disease_labels[top_idx]}**")
-
-# Footer
-st.markdown("""
-    <div class="footer">
-        Made By Keerthi Vardhan, Sathwik & Sujith · © 2025
-    </div>
-""", unsafe_allow_html=True)
+        st
