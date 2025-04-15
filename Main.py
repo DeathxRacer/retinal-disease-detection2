@@ -39,7 +39,7 @@ def preprocess_image(image):
     ])
     return transform(image).unsqueeze(0)
 
-# Custom CSS for upload box styling
+# Custom CSS for the upload box and floating behavior
 st.markdown("""
     <style>
     .main {
@@ -98,6 +98,23 @@ st.markdown("""
         display: flex;
         justify-content: center;
         align-items: center;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        width: 80%;  /* Adjust width as needed */
+    }
+
+    /* Custom Text Styling */
+    .custom-text {
+        font-size: 18px;
+        color: #ffffff;
+    }
+
+    /* Add spacing below the floating box */
+    .main-content {
+        padding-top: 300px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -106,8 +123,19 @@ st.markdown("""
 st.markdown('<h1 class="title">👁️ Retinal Disease Diagnosis🩺</h1>', unsafe_allow_html=True)
 st.image("https://chromaviso.com/hubfs/Blog/shutterstock_1962443701_Lille.jpeg", caption="Human Eye - Retinal Analysis", use_column_width=True)
 
-# Description
+# Description section
 st.markdown('<p class="description">Upload a retinal image to analyze for common diseases using deep learning models. See results instantly!</p>', unsafe_allow_html=True)
+
+# Custom Uploader Text with Limit and Formats
+st.markdown("""
+    <div class="custom-text">
+        Drag and drop file here<br>
+        Limit 200MB per file • JPG, JPEG, PNG
+    </div>
+""", unsafe_allow_html=True)
+
+# Add content below the floating box to allow scrolling
+st.markdown('<div class="main-content"></div>', unsafe_allow_html=True)
 
 # Upload image
 uploaded_file = st.file_uploader("📤 Drag and drop or click to upload image", type=["jpg", "jpeg", "png"])
@@ -130,7 +158,7 @@ if uploaded_file:
         top_idx = np.argmax(probs)
         st.success(f"🧾 Most likely diagnosis: **{disease_labels[top_idx]}**")
 
-# Footer
+# Footer section
 st.markdown("""
     <div class="footer">
         Made By Keerthi Vardhan, Sathwik & Sujith · © 2025
