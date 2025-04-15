@@ -39,7 +39,7 @@ def preprocess_image(image):
     ])
     return transform(image).unsqueeze(0)
 
-# Custom CSS for the upload box and floating behavior
+# Style the page with custom background and design
 st.markdown("""
     <style>
     .main {
@@ -86,36 +86,6 @@ st.markdown("""
         height: 25px;
         border-radius: 10px;
     }
-
-    /* Custom Upload Box Styling */
-    [data-testid="stFileUploader"] > div {
-        border: 2px dashed #00bcd4;
-        border-radius: 15px;
-        padding: 40px;
-        text-align: center;
-        background-color: #262626;
-        height: 250px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 10;
-        width: 80%;  /* Adjust width as needed */
-    }
-
-    /* Custom Text Styling */
-    .custom-text {
-        font-size: 18px;
-        color: #ffffff;
-    }
-
-    /* Add spacing below the floating box */
-    .main-content {
-        padding-top: 300px;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -126,19 +96,8 @@ st.image("https://chromaviso.com/hubfs/Blog/shutterstock_1962443701_Lille.jpeg",
 # Description section
 st.markdown('<p class="description">Upload a retinal image to analyze for common diseases using deep learning models. See results instantly!</p>', unsafe_allow_html=True)
 
-# Custom Uploader Text with Limit and Formats
-st.markdown("""
-    <div class="custom-text">
-        Drag and drop file here<br>
-        Limit 200MB per file • JPG, JPEG, PNG
-    </div>
-""", unsafe_allow_html=True)
-
-# Add content below the floating box to allow scrolling
-st.markdown('<div class="main-content"></div>', unsafe_allow_html=True)
-
 # Upload image
-uploaded_file = st.file_uploader("📤 Drag and drop or click to upload image", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("Upload a retinal image", type=["jpg", "jpeg", "png"])
 
 if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
@@ -152,13 +111,14 @@ if uploaded_file:
 
         st.subheader("📊 Prediction Confidence")
         for i, disease in enumerate(disease_labels):
-            st.progress(int(probs[i] * 100))
-            st.write(f"{disease}: {probs[i] * 100:.2f}%")
+            # Ensure progress is in percentage
+            st.progress(int(probs[i] * 100))  # progress bar (converted to percentage)
+            st.write(f"{disease}: {probs[i] * 100:.2f}%")  # text output
 
         top_idx = np.argmax(probs)
         st.success(f"🧾 Most likely diagnosis: **{disease_labels[top_idx]}**")
 
-# Footer section
+# Footer
 st.markdown("""
     <div class="footer">
         Made By Keerthi Vardhan, Sathwik & Sujith · © 2025
