@@ -87,4 +87,4 @@ if uploaded_file:
         st.success(f"🧾 Most likely diagnosis: **{disease_labels[top_idx]}**")
 
 # Footer
-st.markdown('<div class="footer">Made with ❤️ using PyTorch & Streamlit · © 2025</div>', unsafe_allow_html=True)
+st.markdown('<div class="footer">Made By Keerthi Vardhan, Sathwik & Sujith · © 2025</div>', unsafe_allow_html=True)
