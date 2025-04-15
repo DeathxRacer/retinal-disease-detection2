@@ -61,9 +61,10 @@ st.markdown("""
     }
     .footer {
         text-align: center;
-        font-size: 12px;
-        color: #888;
+        font-size: 18px;
+        color: #f0f0f0;
         margin-top: 50px;
+        opacity: 0.8;
     }
     .image-container {
         border-radius: 10px;
@@ -118,4 +119,8 @@ if uploaded_file:
         st.success(f"🧾 Most likely diagnosis: **{disease_labels[top_idx]}**")
 
 # Footer
-st.markdown('<div class="footer">Made By Keerthi Vardhan, Sathwik & Sujith · © 2025</div>', unsafe_allow_html=True)
+st.markdown("""
+    <div class="footer">
+        Made By Keerthi Vardhan, Sathwik & Sujith · © 2025
+    </div>
+""", unsafe_allow_html=True)
