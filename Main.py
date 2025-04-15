@@ -17,7 +17,7 @@ disease_labels = [
     "Normal"
 ]
 
-# Load trained model
+# Load the model
 @st.cache_resource
 def load_model():
     model = models.resnet50(weights=None)
@@ -29,7 +29,7 @@ def load_model():
 
 model = load_model()
 
-# Preprocess uploaded image
+# Preprocessing
 def preprocess_image(image):
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
@@ -39,96 +39,52 @@ def preprocess_image(image):
     ])
     return transform(image).unsqueeze(0)
 
-# --- Page Style ---
+# --- 💠 Custom CSS for Pinned Uploader ---
 st.markdown("""
     <style>
-    .main {
-        background-color: #1c1c1c;
-        color: #f0f0f0;
-        font-family: 'Segoe UI', sans-serif;
-    }
-    .title {
-        text-align: center;
-        font-size: 40px;
-        color: #00bcd4;
-        font-weight: bold;
-    }
-    .description {
-        text-align: center;
-        font-size: 18px;
-        color: #ffffff;
-        margin-bottom: 30px;
-    }
-    .footer {
-        text-align: center;
-        font-size: 18px;
-        color: #f0f0f0;
-        margin-top: 50px;
-        opacity: 0.8;
-    }
-    .image-container {
-        border-radius: 10px;
-        border: 2px solid #00bcd4;
-        padding: 10px;
-    }
-    .button {
-        background-color: #00bcd4;
-        color: #fff;
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 5px;
-        border: none;
-    }
-    .button:hover {
-        background-color: #008c99;
-    }
-    .progress-bar {
-        height: 25px;
-        border-radius: 10px;
-    }
-
-    /* FIXED UPLOADER */
     .fixed-uploader {
         position: fixed;
         top: 20px;
         right: 20px;
-        width: 300px;
         z-index: 9999;
         background-color: #262730;
-        border: 2px solid #00bcd4;
-        border-radius: 10px;
         padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        width: 300px;
     }
     </style>
+    <div class="fixed-uploader">
+        <p style='color: white; font-weight: bold;'>📁 Upload Retinal Image</p>
+        <div id="uploader-box"></div>
+    </div>
 """, unsafe_allow_html=True)
 
-# Inject a container for the fixed uploader using HTML + components
-from streamlit.components.v1 import html
+# 🧠 Title & Intro
+st.markdown('<h1 style="text-align:center; color:#00bcd4;">👁️ Retinal Disease Diagnosis</h1>', unsafe_allow_html=True)
+st.image("https://chromaviso.com/hubfs/Blog/shutterstock_1962443701_Lille.jpeg", caption="Retinal Scan", use_column_width=True)
+st.markdown('<p style="text-align:center; color:white;">Upload a retinal image to detect common eye diseases using AI.</p>', unsafe_allow_html=True)
 
-html("""
-<div class="fixed-uploader">
-    <p style='color:white;font-weight:bold;margin-bottom:8px'>📤 Upload Retinal Image</p>
-</div>
-""", height=100)
+# 👇 Regular file uploader (to be moved using JS)
+uploaded_file = st.file_uploader("Upload retinal image", type=["jpg", "jpeg", "png"], key="file-upload")
 
-# Place uploader inside the fixed container using st.empty()
-uploader_placeholder = st.empty()
-with uploader_placeholder.container():
-    uploaded_file = st.file_uploader("", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
+# 📦 Move uploader into floating box using JavaScript
+st.markdown("""
+    <script>
+    const fileUploader = window.parent.document.querySelector('section[data-testid="stFileUploader"]');
+    const targetBox = window.parent.document.getElementById("uploader-box");
+    if (fileUploader && targetBox && !targetBox.contains(fileUploader)) {
+        targetBox.appendChild(fileUploader);
+    }
+    </script>
+""", unsafe_allow_html=True)
 
-# Main Title & Image
-st.markdown('<h1 class="title">👁️ Retinal Disease Diagnosis🩺</h1>', unsafe_allow_html=True)
-st.image("https://chromaviso.com/hubfs/Blog/shutterstock_1962443701_Lille.jpeg", caption="Human Eye - Retinal Analysis", use_column_width=True)
-
-# Description section
-st.markdown('<p class="description">Upload a retinal image to analyze for common diseases using deep learning models. See results instantly!</p>', unsafe_allow_html=True)
-
-# Image processing and prediction
+# 🧪 Classification Logic
 if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Uploaded Retinal Image", use_column_width=True, channels="RGB")
+    st.image(image, caption="Uploaded Image", use_column_width=True)
 
-    if st.button("🔍 Classify", key="classify_button"):
+    if st.button("🔍 Classify"):
         input_tensor = preprocess_image(image)
         with torch.no_grad():
             output = model(input_tensor)
@@ -137,14 +93,14 @@ if uploaded_file:
         st.subheader("📊 Prediction Confidence")
         for i, disease in enumerate(disease_labels):
             st.progress(int(probs[i] * 100))
-            st.write(f"{disease}: {probs[i] * 100:.2f}%")
+            st.write(f"**{disease}**: {probs[i] * 100:.2f}%")
 
         top_idx = np.argmax(probs)
         st.success(f"🧾 Most likely diagnosis: **{disease_labels[top_idx]}**")
 
-# Footer
+# 👣 Footer
 st.markdown("""
-    <div class="footer">
-        Made By Keerthi Vardhan, Sathwik & Sujith · © 2025
+    <div style="text-align:center; margin-top:50px; color:#bbb;">
+        Made by Keerti Vardhan, Sathwik & Sujith · © 2025
     </div>
 """, unsafe_allow_html=True)
