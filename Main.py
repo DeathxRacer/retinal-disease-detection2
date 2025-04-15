@@ -39,13 +39,44 @@ def preprocess_image(image):
     ])
     return transform(image).unsqueeze(0)
 
-# Style the page with custom background and design
+# Apply custom CSS for the floating file uploader box
 st.markdown("""
     <style>
+    /* CSS for floating the file uploader box */
+    .stFileUploader {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        width: 80%;  /* Adjust width as per your needs */
+        max-width: 500px;  /* Maximum width of the uploader */
+        border-radius: 8px;
+        padding: 10px;
+        background-color: rgba(255, 255, 255, 0.8);  /* Semi-transparent background */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Style for the uploader box */
+    .stFileUploader .css-1k76s6d {
+        background-color: #00bcd4;
+        color: white;
+        border-radius: 8px;
+        padding: 15px;
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .stFileUploader .css-1k76s6d:hover {
+        background-color: #008c99;
+    }
+
+    /* CSS for other page elements */
     .main {
         background-color: #1c1c1c;
         color: #f0f0f0;
         font-family: 'Segoe UI', sans-serif;
+        margin-top: 120px;  /* Adjust the margin for content */
     }
     .title {
         text-align: center;
@@ -65,26 +96,6 @@ st.markdown("""
         color: #f0f0f0;
         margin-top: 50px;
         opacity: 0.8;
-    }
-    .image-container {
-        border-radius: 10px;
-        border: 2px solid #00bcd4;
-        padding: 10px;
-    }
-    .button {
-        background-color: #00bcd4;
-        color: #fff;
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 5px;
-        border: none;
-    }
-    .button:hover {
-        background-color: #008c99;
-    }
-    .progress-bar {
-        height: 25px;
-        border-radius: 10px;
     }
     </style>
 """, unsafe_allow_html=True)
