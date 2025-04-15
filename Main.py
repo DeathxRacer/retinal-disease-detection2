@@ -45,11 +45,12 @@ st.markdown("""
     /* CSS for floating the file uploader box */
     .stFileUploader {
         position: fixed;
-        top: 20px;
+        top: 50%;  /* Position vertically centered */
         left: 20px;
+        transform: translateY(-50%);  /* Exact vertical centering */
         z-index: 1000;
-        width: 150px;  /* Set width for square */
-        height: 150px;  /* Set height for square */
+        width: 220px;  /* Slightly rectangular width */
+        height: 120px;  /* Slightly rectangular height */
         border-radius: 15px;  /* Rounded corners */
         padding: 10px;
         background-color: rgba(255, 255, 255, 0.8);  /* Semi-transparent background */
@@ -131,4 +132,11 @@ if uploaded_file:
             st.write(f"{disease}: {probs[i] * 100:.2f}%")  # text output
 
         top_idx = np.argmax(probs)
-        st
+        st.success(f"🧾 Most likely diagnosis: **{disease_labels[top_idx]}**")
+
+# Footer
+st.markdown("""
+    <div class="footer">
+        Made By Keerthi Vardhan, Sathwik & Sujith · © 2025
+    </div>
+""", unsafe_allow_html=True)
