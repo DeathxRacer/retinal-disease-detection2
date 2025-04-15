@@ -110,6 +110,7 @@ if uploaded_file:
 
         st.subheader("📊 Prediction Confidence")
         for i, disease in enumerate(disease_labels):
+            # Ensure that progress value is within [0, 1]
             st.progress(min(probs[i], 1.0))  # progress bar
             st.write(f"{disease}: {probs[i] * 100:.2f}%")  # text output
 
