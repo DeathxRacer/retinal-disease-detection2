@@ -62,7 +62,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Title section
-st.markdown('<h1 class="title">🧠 Retinal Disease Classifier</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="title">🧠 Retinal Disease Diagnosis🩺</h1>', unsafe_allow_html=True)
 st.write("Upload a retinal image to analyze for common diseases using deep learning.")
 
 # Upload image
@@ -80,7 +80,7 @@ if uploaded_file:
 
         st.subheader("📊 Prediction Confidence")
         for i, disease in enumerate(disease_labels):
-            st.progress(min(float(probs[i]), 1.0))  # progress bar
+            st.progress(min(probs[i], 1.0))  # progress bar
             st.write(f"**{disease}**: `{probs[i] * 100:.2f}%`")
 
         top_idx = np.argmax(probs)
