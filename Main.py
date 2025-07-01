@@ -14,7 +14,7 @@ disease_labels = [
     "Macular Degeneration",
     "Retinal Vascular Occlusion",
     "Opacity",
-    "Normal"
+    "Condition Normal"
 ]
 
 # Load trained model
